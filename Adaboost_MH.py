@@ -5,7 +5,7 @@
 @author: Xu Jing
 @contact: xujingdaily@gmail.com
 @site: https://github.com/XuJing1022
-@file: Adaboost_MH_new.py
+@file: Adaboost_MH.py
 @created: 18/12/1 上午9:24
 """
 from functools import reduce

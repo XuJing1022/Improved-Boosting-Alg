@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="814aa989-65b7-46f8-9185-be710350feba" name="Default Changelist" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Adaboost_MH.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Adaboost_MH_new.py" afterPath="$PROJECT_DIR$/Adaboost_MH_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Adaboost_MR.py" afterPath="$PROJECT_DIR$/Adaboost_MR.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools.py" afterPath="$PROJECT_DIR$/tools.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Adaboost_MH_new.py" afterPath="$PROJECT_DIR$/Adaboost_MH.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -67,13 +63,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Adaboost_MH_new.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Adaboost_MH_new.py">
+      <file leaf-file-name="Adaboost_MH.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Adaboost_MH.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1800">
-              <caret line="120" column="19" lean-forward="false" selection-start-line="120" selection-start-column="19" selection-end-line="120" selection-end-column="19" />
+            <state relative-caret-position="300">
+              <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
-                <element signature="e#188#216#0" expanded="true" />
+                <element signature="e#184#212#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -146,13 +142,13 @@
         <option value="$PROJECT_DIR$/Adaboost.py" />
         <option value="$PROJECT_DIR$/discrete_Adaboost_MH.py" />
         <option value="$PROJECT_DIR$/base_boost.py" />
-        <option value="$PROJECT_DIR$/Adaboost_MH.py" />
         <option value="$PROJECT_DIR$/data/yeast-train.arff" />
         <option value="$PROJECT_DIR$/data/yeast-test.arff" />
         <option value="$PROJECT_DIR$/efficient_Adaboost_MR.py" />
         <option value="$PROJECT_DIR$/Adaboost_MH_new.py" />
         <option value="$PROJECT_DIR$/tools.py" />
         <option value="$PROJECT_DIR$/Adaboost_MR.py" />
+        <option value="$PROJECT_DIR$/Adaboost_MH.py" />
       </list>
     </option>
   </component>
@@ -241,7 +237,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Improved_Boosting_Alg" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Adaboost_MH_new.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Adaboost_MH.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -353,6 +349,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -361,9 +358,9 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2374798" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2374798" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4965612" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -510,12 +507,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Adaboost_MH_new.py">
+    <entry file="file://$PROJECT_DIR$/Adaboost_MH.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
           <caret line="64" column="66" lean-forward="false" selection-start-line="64" selection-start-column="66" selection-end-line="64" selection-end-column="66" />
           <folding>
-            <element signature="e#188#216#0" expanded="true" />
+            <element signature="e#184#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -597,12 +594,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Adaboost_MH_new.py">
+    <entry file="file://$PROJECT_DIR$/Adaboost_MH.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding>
-            <element signature="e#188#216#0" expanded="true" />
+            <element signature="e#184#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -633,12 +630,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Adaboost_MH_new.py">
+    <entry file="file://$PROJECT_DIR$/Adaboost_MH.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="885">
           <caret line="59" column="23" lean-forward="false" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
           <folding>
-            <element signature="e#188#216#0" expanded="true" />
+            <element signature="e#184#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -781,12 +778,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Adaboost_MH_new.py">
+    <entry file="file://$PROJECT_DIR$/Adaboost_MH.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1800">
-          <caret line="120" column="19" lean-forward="false" selection-start-line="120" selection-start-column="19" selection-end-line="120" selection-end-column="19" />
+        <state relative-caret-position="300">
+          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="e#188#216#0" expanded="true" />
+            <element signature="e#184#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
