@@ -30,7 +30,7 @@ class discrete_Adaboost_MH:
         self.m = X.shape[0]  # data num
 
         # construct (x,label)
-        x_ = np.tile(X, (self.k,1))  # k*m
+        x_ = X  # np.tile(X, (self.k,1))  # k*m
         y_ = np.array([])  # k*m
         for class_ in self.class_list:
             for i in range(self.m):
@@ -57,12 +57,12 @@ class discrete_Adaboost_MH:
             # Train weak learner using distribution D_t
             for j in range(self.k):
                 self.h_t = self.model(max_depth=max_depth, presort=True)
-                self.h_t.fit(self.X[j*self.m:(j+1)*self.m], self.y[j*self.m:(j+1)*self.m], sample_weight=self.D_t[j*self.m:(j+1)*self.m])
+                self.h_t.fit(self.X, self.y[j*self.m:(j+1)*self.m], sample_weight=self.D_t[j*self.m:(j+1)*self.m])
                 # Get weak hypothesis h_t
                 self.h.append(self.h_t)
 
                 # Choose alpha_t
-                pred_y = np.append(pred_y, self.h_t.predict(self.X[j*self.m:(j+1)*self.m]))
+                pred_y = np.append(pred_y, self.h_t.predict(self.X))
 
             r_t = np.dot(self.D_t, np.multiply(self.y, pred_y))
 
@@ -75,7 +75,7 @@ class discrete_Adaboost_MH:
             # Update
             self.D_t = np.multiply(self.D_t, list(map(exp, -self.alpha_t * np.multiply(self.y, pred_y))))
             self.D_t /= np.sum(self.D_t)
-            self.D = np.append(self.D, self.D_t)
+            # self.D = np.append(self.D, self.D_t)
 
     def predict(self, x):
         m = x.shape[0]
@@ -118,7 +118,7 @@ def SDSS():
     for i in range(len(X_test)):
         print(ret_index[i])
         print(y_test[i])
-    scores = one_error(ret_index, y_test)
+    scores = one_error(ret_index, y_test, all_=True)
     print('----------SDSS one error-----------\n', scores)
 
 
@@ -134,13 +134,13 @@ def mill():
 
 def yeast():
     path = 'data/yeast'
-    X_train, X_test, y_train, y_test, class_list = load_data(path)
-    clf = discrete_Adaboost_MH(X_train, y_train, class_list, T=50)
+    X_train, y_train, X_test, y_test, class_list = load_data(path)
+    clf = discrete_Adaboost_MH(X_train, y_train, class_list, T=200)
     ret_index = clf.predict(X_test)
     for i in range(len(X_test)):
         print(ret_index[i])
         print(y_test[i])
-    scores = one_error(ret_index, y_test)
+    scores = one_error(ret_index, y_test, all_=True)
     print('----------yeast one error-----------\n', scores)
 
 if __name__ == "__main__":

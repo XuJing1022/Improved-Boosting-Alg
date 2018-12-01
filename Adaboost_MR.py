@@ -18,20 +18,23 @@ from sklearn.metrics import precision_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
-from tools import load_data, one_error
+from tools import load_data, one_error, evaluate
 
 
 class discrete_Adaboost_MR():
     """
     Implementation of discrete Adaboost.MR based on ranking loss
     """
-    def __init__(self, X, y, class_list, T=20, model=DecisionTreeClassifier, pretrained=True):
+    def __init__(self, X, y,test_x, test_y, class_list, T=20, model=DecisionTreeClassifier, pretrained=True):
+        self.test_X = test_x
+        self.test_y = test_y
+        self.y_train = y
         self.class_list = class_list
         self.k = len(self.class_list)
         self.m = X.shape[0]  # data num
 
         # construct (x,label)
-        x_ = np.tile(X, (self.k, 1))  # k*m
+        x_ = X  # np.tile(X, (self.k, 1))  # k*m
         y_ = np.array([])  # k*m
         for class_ in self.class_list:
             for i in range(self.m):
@@ -72,12 +75,13 @@ class discrete_Adaboost_MR():
             # Train weak learner using distribution D_t
             for j in range(self.k):
                 self.h_t = self.model(max_depth=max_depth, presort=True)
-                self.h_t.fit(self.X[j*self.m:(j+1)*self.m], self.y[j*self.m:(j+1)*self.m], sample_weight=np.sum(self.D_t, axis=1)[:, j])
+                self.h_t.fit(self.X, self.y[j*self.m:(j+1)*self.m], sample_weight=np.sum(self.D_t, axis=1)[:, j])
                 # Get weak hypothesis h_t
                 self.h.append(self.h_t)
 
                 # Choose alpha_t
-                pred_y = np.append(pred_y, self.h_t.predict(self.X[j*self.m:(j+1)*self.m]))
+                pred_y = np.append(pred_y, self.h_t.predict(self.X))
+
             tmp_sum = 0
             for (x_i, l0, l1) in self.pairs:
                 tmp_sum += self.D_t[x_i][l0][l1] * (pred_y[l1 * self.m + x_i] - pred_y[l0 * self.m + x_i])
@@ -99,12 +103,35 @@ class discrete_Adaboost_MR():
             for (x_i, l0, l1) in self.pairs:
                 self.D_t[x_i][l0][l1] = self.D_t[x_i][l0][l1] * exp(0.5*self.alpha_t*(pred_y[l0 * self.m + x_i] - pred_y[l1 * self.m + x_i]))
             self.D_t /= np.sum(self.D_t)
-            self.D = np.append(self.D, self.D_t)
+            # self.D = np.append(self.D, self.D_t)
 
-    def predict(self, x):
+            ret_index, pred = self.predict(self.test_X, i+1)
+            # for i in range(len(X_test)):
+            #     print(ret_index[i])
+            #     print(y_test[i])
+            scores = one_error(ret_index, self.test_y)
+            y_train = []
+            at_n = 3
+            for j in range(len(ret_index)):
+                tmp = [0]*self.k
+                for ll in ret_index[j]:
+                    if ret_index[j].index(ll) < self.k - at_n:
+                        continue
+                    tmp[self.class_list.index(ll)] = 1
+                ret_index[j] = tmp
+
+                tmp = [0] * self.k
+                for ll in self.test_y[j]:
+                    tmp[self.class_list.index(ll)] = 1
+                y_train.append(tmp)
+
+            precision, recall, error = evaluate(np.array(ret_index), np.array(y_train))
+            print(i, precision, recall, error, scores)
+
+    def predict(self, x, T):
         m = x.shape[0]
-        pred = [self.alphas[t] * self.h[t*self.k+l].predict(x) for t in range(self.T) for l in range(self.k)]  # T*k*m
-        pred = np.array(pred).reshape((self.T, self.k, m)).transpose(2, 1, 0)  # m*k*T
+        pred = [self.alphas[t] * self.h[t*self.k+l].predict(x) for t in range(T) for l in range(self.k)]  # T*k*m
+        pred = np.array(pred).reshape((T, self.k, m)).transpose(2, 1, 0)  # m*k*T
         pred = np.sum(pred, axis=-1)  # m*k
         pred = list(map(list, pred))
         ret_index = list(map(list, np.argsort(pred)))  #
@@ -148,29 +175,29 @@ def SDSS():
     path = 'data/SDSS.csv'
     x, y, class_list = load_data(path)
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=42)
-    clf = discrete_Adaboost_MR(X_train, y_train, class_list, T=50)
-    ret_index, pred = clf.predict(X_test)
-    for i in range(len(X_test)):
-        print(ret_index[i])
-        print(y_test[i])
+    clf = discrete_Adaboost_MR(X_train, y_train, X_test, y_test, class_list, T=100)
+    ret_index, pred = clf.predict(X_test, clf.T)
+    # for i in range(len(X_test)):
+    #     print(ret_index[i])
+    #     print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print('----------SDSS one error-----------\n', scores)
-    print(pred)
+    print('----------SDSS one error on test-----------\n', scores)
+    # print(pred)
 
 
 def yeast():
     path = 'data/yeast'
-    X_train, X_test, y_train, y_test, class_list = load_data(path)
-    clf = discrete_Adaboost_MR(X_train, y_train, class_list, T=50)
-    ret_index, pred = clf.predict(X_test)
-    for i in range(len(X_test)):
-        print(ret_index[i])
-        print(y_test[i])
+    X_train, y_train, X_test, y_test, class_list = load_data(path)
+    clf = discrete_Adaboost_MR(X_train, y_train, X_test, y_test, class_list, T=100)
+    ret_index, pred = clf.predict(X_test, clf.T)
+    # for i in range(len(X_test)):
+    #     print(ret_index[i])
+    #     print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print('----------yeast one error-----------\n', scores)
-    print(pred)
+    print('----------yeast one error on test-----------\n', scores)
+    # print(pred)
 
 if __name__ == "__main__":
     # test()
-    SDSS()
+    # SDSS()
     yeast()
