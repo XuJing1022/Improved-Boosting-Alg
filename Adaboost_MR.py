@@ -154,21 +154,23 @@ def SDSS():
         print(ret_index[i])
         print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print(scores)
+    print('----------SDSS one error-----------\n', scores)
     print(pred)
+
 
 def yeast():
     path = 'data/yeast'
     X_train, X_test, y_train, y_test, class_list = load_data(path)
     clf = discrete_Adaboost_MR(X_train, y_train, class_list, T=50)
-    ret_index = clf.predict(X_test)
+    ret_index, pred = clf.predict(X_test)
     for i in range(len(X_test)):
         print(ret_index[i])
         print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print(scores)
+    print('----------yeast one error-----------\n', scores)
+    print(pred)
 
 if __name__ == "__main__":
     # test()
-    # SDSS()
+    SDSS()
     yeast()

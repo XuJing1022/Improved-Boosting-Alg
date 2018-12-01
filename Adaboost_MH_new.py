@@ -119,7 +119,7 @@ def SDSS():
         print(ret_index[i])
         print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print(scores)
+    print('----------SDSS one error-----------\n', scores)
 
 
 def mill():
@@ -141,9 +141,9 @@ def yeast():
         print(ret_index[i])
         print(y_test[i])
     scores = one_error(ret_index, y_test)
-    print(scores)
+    print('----------yeast one error-----------\n', scores)
 
 if __name__ == "__main__":
-    # SDSS()
+    SDSS()
     # mill()
     yeast()
