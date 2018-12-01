@@ -17,14 +17,16 @@ from math import log, exp
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
-from tools import load_data, one_error
+from tools import load_data, one_error, evaluate
 
 
 class discrete_Adaboost_MH:
     """
     Implementation of Adaboost as base model
     """
-    def __init__(self, X, y, class_list, T=20, model=DecisionTreeClassifier, pretrained=True):
+    def __init__(self, X, y, test_x, test_y, class_list, T=20, model=DecisionTreeClassifier, pretrained=True):
+        self.test_X = test_x
+        self.test_y = test_y
         self.class_list = class_list
         self.k = len(self.class_list)
         self.m = X.shape[0]  # data num
@@ -77,10 +79,33 @@ class discrete_Adaboost_MH:
             self.D_t /= np.sum(self.D_t)
             # self.D = np.append(self.D, self.D_t)
 
-    def predict(self, x):
+            ret_index = self.predict(self.test_X, i + 1)
+            # for i in range(len(X_test)):
+            #     print(ret_index[i])
+            #     print(y_test[i])
+            scores = one_error(ret_index, self.test_y)
+            y_train = []
+            at_n = 3
+            for j in range(len(ret_index)):
+                tmp = [0] * self.k
+                for ll in ret_index[j]:
+                    if ret_index[j].index(ll) < self.k - at_n:
+                        continue
+                    tmp[self.class_list.index(ll)] = 1
+                ret_index[j] = tmp
+
+                tmp = [0] * self.k
+                for ll in self.test_y[j]:
+                    tmp[self.class_list.index(ll)] = 1
+                y_train.append(tmp)
+
+            precision, recall, error = evaluate(np.array(ret_index), np.array(y_train))
+            print(i, precision, recall, error, scores)
+
+    def predict(self, x, T):
         m = x.shape[0]
-        pred = [self.alphas[t] * self.h[t*self.k+l].predict(x) for t in range(self.T) for l in range(self.k)]  # T*k*m
-        pred = np.array(pred).reshape((self.T, self.k, m)).transpose(2, 1, 0)  # m*k*T
+        pred = [self.alphas[t] * self.h[t*self.k+l].predict(x) for t in range(T) for l in range(self.k)]  # T*k*m
+        pred = np.array(pred).reshape((T, self.k, m)).transpose(2, 1, 0)  # m*k*T
         pred = np.sum(pred, axis=-1)  # m*k
 
         H = np.sign(pred)
@@ -125,7 +150,7 @@ def SDSS():
 def mill():
     path = 'data/mediamill'
     train_x, train_y, test_x, test_y, class_list = load_data(path)
-    clf = discrete_Adaboost_MH(train_x, train_y, class_list, T=50)
+    clf = discrete_Adaboost_MH(train_x, train_y, test_x, test_y, class_list, T=50)
     ret_index = clf.predict(test_x)
     for i in range(len(test_x)):
         print(ret_index[i])
@@ -135,8 +160,8 @@ def mill():
 def yeast():
     path = 'data/yeast'
     X_train, y_train, X_test, y_test, class_list = load_data(path)
-    clf = discrete_Adaboost_MH(X_train, y_train, class_list, T=200)
-    ret_index = clf.predict(X_test)
+    clf = discrete_Adaboost_MH(X_train, y_train, X_test, y_test, class_list, T=200)
+    ret_index = clf.predict(X_test, clf.T)
     for i in range(len(X_test)):
         print(ret_index[i])
         print(y_test[i])
@@ -144,6 +169,6 @@ def yeast():
     print('----------yeast one error-----------\n', scores)
 
 if __name__ == "__main__":
-    SDSS()
+    # SDSS()
     # mill()
     yeast()
