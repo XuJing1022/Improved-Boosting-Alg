@@ -13,15 +13,20 @@ from functools import reduce
 import operator
 import numpy as np
 from math import log, exp
+
+from sklearn.metrics import precision_score
+from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+
+from tools import load_data, one_error
 
 
 class discrete_Adaboost_MR():
     """
     Implementation of discrete Adaboost.MR based on ranking loss
     """
-    def __init__(self, X, y, T=20, model=DecisionTreeClassifier, pretrained=True):
-        self.class_list = list(set(reduce(operator.add, y)))
+    def __init__(self, X, y, class_list, T=20, model=DecisionTreeClassifier, pretrained=True):
+        self.class_list = class_list
         self.k = len(self.class_list)
         self.m = X.shape[0]  # data num
 
@@ -123,10 +128,47 @@ class discrete_Adaboost_MR():
         return ret
 
 
-if __name__ == "__main__":
+def test():
     x = np.array([[1, 2, 3, 4], [2, 3, 4, 5], [6, 7, 8, 9], [2, 5, 7, 8]])
     y = np.array([[1, 2], [2], [3, 1], [2, 3]])
-    clf = discrete_Adaboost_MR(x, y, T=200)
+    clf = discrete_Adaboost_MR(x, y, [1,2,3], T=200)
     ret_index, pred = clf.predict(np.array([[1, 2, 3, 4], [2, 3, 4, 5], [6, 7, 8, 9], [2, 5, 7, 8]]))
     print(ret_index)
     print(pred)
+    '''
+    [[3, 1, 2], [1, 3, 2], [2, 1, 3], [1, 2, 3]]
+    [[-7.27423079  7.27423079  7.27423079]
+     [-7.27423079 -7.27423079  7.27423079]
+     [-7.27423079  7.27423079  7.27423079]
+     [-7.27423079  7.27423079  7.27423079]]
+    '''
+
+
+def SDSS():
+    path = 'data/SDSS.csv'
+    x, y, class_list = load_data(path)
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=42)
+    clf = discrete_Adaboost_MR(X_train, y_train, class_list, T=50)
+    ret_index, pred = clf.predict(X_test)
+    for i in range(len(X_test)):
+        print(ret_index[i])
+        print(y_test[i])
+    scores = one_error(ret_index, y_test)
+    print(scores)
+    print(pred)
+
+def yeast():
+    path = 'data/yeast'
+    X_train, X_test, y_train, y_test, class_list = load_data(path)
+    clf = discrete_Adaboost_MR(X_train, y_train, class_list, T=50)
+    ret_index = clf.predict(X_test)
+    for i in range(len(X_test)):
+        print(ret_index[i])
+        print(y_test[i])
+    scores = one_error(ret_index, y_test)
+    print(scores)
+
+if __name__ == "__main__":
+    # test()
+    # SDSS()
+    yeast()
