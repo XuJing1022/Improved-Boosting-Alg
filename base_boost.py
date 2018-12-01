@@ -17,7 +17,7 @@ class Adaboost:
     """
     Implementation of Adaboost as base model
     """
-    def __init__(self, X, y, T=20, model=DecisionTreeClassifier):
+    def __init__(self, X, y, T=20, model=DecisionTreeClassifier, pretrained=True):
         self.X = X
         self.m = self.X.shape[0]  # data num
         self.y = y.copy()  # np.array
@@ -41,7 +41,8 @@ class Adaboost:
         self.h = []
         self.h_t = None
         self.alphas = np.array([])
-        self.train()
+        if pretrained:
+            self.train()
 
     def train(self):
         for i in range(self.T):
