@@ -41,7 +41,7 @@ class discrete_Adaboost_MR():
         for i in range(self.m):
             tmp = []
             for l_0 in range(self.k):
-                zeors_ = np.zeros([len(self.class_list)])
+                zeors_ = np.ones([len(self.class_list)]) * (1/self.m)  # np.zeros([len(self.class_list)])
                 if self.class_list[l_0] not in y[i]:
                     d = 1/(self.m*len(y[i])*len(set(self.class_list)-set(y[i])))
                     for l in y[i]:
@@ -67,7 +67,7 @@ class discrete_Adaboost_MR():
             # Train weak learner using distribution D_t
             for j in range(self.k):
                 self.h_t = self.model(max_depth=max_depth, presort=True)
-                self.h_t.fit(self.X[j*self.m:(j+1)*self.m], self.y[j*self.m:(j+1)*self.m], sample_weight=np.sum(self.D_t,axis=1)[:, j])
+                self.h_t.fit(self.X[j*self.m:(j+1)*self.m], self.y[j*self.m:(j+1)*self.m], sample_weight=np.sum(self.D_t, axis=1)[:, j])
                 # Get weak hypothesis h_t
                 self.h.append(self.h_t)
 
@@ -101,12 +101,12 @@ class discrete_Adaboost_MR():
         pred = [self.alphas[t] * self.h[t*self.k+l].predict(x) for t in range(self.T) for l in range(self.k)]  # T*k*m
         pred = np.array(pred).reshape((self.T, self.k, m)).transpose(2, 1, 0)  # m*k*T
         pred = np.sum(pred, axis=-1)  # m*k
-        ret_index = list(np.argsort(-1*pred))  #
+        pred = list(map(list, pred))
+        ret_index = list(map(list, np.argsort(pred)))  #
         for i in range(m):
-            pred[i] = sorted(pred[i], key=lambda x: pred[i].index(ret_index.index(x)))
             ret_index[i] = sorted(self.class_list, key=lambda x: ret_index[i].index(self.class_list.index(x)))  # ret_index is label_ret
 
-        return ret_index, pred
+        return ret_index, np.sort(pred)
 
     def transfer(self, H, x_m):
         """
@@ -126,6 +126,7 @@ class discrete_Adaboost_MR():
 if __name__ == "__main__":
     x = np.array([[1, 2, 3, 4], [2, 3, 4, 5], [6, 7, 8, 9], [2, 5, 7, 8]])
     y = np.array([[1, 2], [2], [3, 1], [2, 3]])
-    clf = discrete_Adaboost_MR(x, y, T=100)
-    ret_index, pred = clf.predict(np.array([[1, 2, 3, 4], [6, 7, 8, 9], [1, 7, 2, 8], [2, 5, 6, 9]]))
-    print(ret_index, pred)
+    clf = discrete_Adaboost_MR(x, y, T=200)
+    ret_index, pred = clf.predict(np.array([[1, 2, 3, 4], [2, 3, 4, 5], [6, 7, 8, 9], [2, 5, 7, 8]]))
+    print(ret_index)
+    print(pred)
